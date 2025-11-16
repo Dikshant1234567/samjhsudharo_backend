@@ -55,7 +55,9 @@ export const getPostEvents = async (req, res) => {
     if (authorId) filter.author = authorId;
     if (authorModel) filter.authorModel = authorModel;
     if (status) filter.status = status;
-    const posts = await PostEvent.find(filter).sort({ createdAt: -1 });
+    const posts = await PostEvent.find(filter)
+      .sort({ createdAt: -1 })
+      .populate({ path: "author", select: "name firstName lastName email" });
     return res.status(200).json(posts);
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -33,7 +33,9 @@ export const getPostVlogs = async (req, res) => {
     if (domain) filter.domain = domain;
     if (authorId) filter.author = authorId;
     if (authorModel) filter.authorModel = authorModel;
-    const posts = await PostVlog.find(filter).sort({ createdAt: -1 });
+    const posts = await PostVlog.find(filter)
+      .sort({ createdAt: -1 })
+      .populate({ path: "author", select: "name firstName lastName email" });
     return res.status(200).json(posts);
   } catch (error) {
     return res.status(500).json({ message: error.message });

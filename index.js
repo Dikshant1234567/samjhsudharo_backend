@@ -10,6 +10,7 @@ import ngoRoutes from "./routes/ngoRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import postEventRoutes from "./routes/postEventRoutes.js";
 import postVlogRoutes from "./routes/postVlogRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -42,6 +43,7 @@ app.use("/api/ngo", ngoRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/post-events", postEventRoutes);
 app.use("/api/post-vlogs", postVlogRoutes);
+app.use("/api/chats", chatRoutes);
 
 // Note: /api/posts endpoints provided via postRoutes
 
@@ -51,6 +53,9 @@ io.on("connection", (socket) => {
   
   socket.on("disconnect", () => {
     console.log("User disconnected");
+  });
+  socket.on("chat:join", (chatId) => {
+    if (chatId) socket.join(String(chatId));
   });
 });
 
